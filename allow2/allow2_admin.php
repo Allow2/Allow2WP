@@ -1,19 +1,20 @@
 <?php
 
-    $host = 'https://app.allow2.com:8443';
+	$homeUrl = get_home_url();
+    $host = 'https://app.allow2.com';
     if($_POST['allow2_setup'] == 'Y') {
         //Form data sent
         $a2token = $_POST['allow2_token'];
         $a2secret = $_POST['allow2_secret'];
-		$a2sandbox = $_POST['allow2_sandbox'];
+		$a2sandbox = '1'; //$_POST['allow2_sandbox'];
 		
         $params = [
             'token' => $a2token,
             'secret' => $a2secret,
-            'redirect' => plugin_dir_url( __FILE__ ) . 'allow2_oauth2callback.php'
+            'redirect' => plugin_dir_url( __FILE__ ) . 'allow2_oauth2callback.php',
+            'webHook' => plugin_dir_url( __FILE__ ) . 'allow2_webhook.php'
         ];
         
-    	$host = 'https://app.allow2.com:8443';
         $url = $host . '/serviceapi/confirmSettings';
 
 		$postargs = array(
@@ -32,6 +33,7 @@
             ?>
             <div class="error"><p><strong><?php _e( 'Incorrect Token, Secret or Redirect URI' ); ?></strong></p></div>
             <?php
+            echo $_POST['allow2_sandbox'];
         } else {
             $obj = json_decode($response_body, true);
             $a2userId = $obj["accountId"];
@@ -67,11 +69,11 @@
     if ($a2userId) {
 ?>
 <div class="wrap">
-    <?php echo '<h2><img width=30 height=30 src="' . $host . '/images/logo_sml.png">&nbsp;' . __( 'Allow2', 'allow2_trdom' ) . "</h2>";
+    <?php echo '<h2><img width=30 height=30 src="https://app.allow2.com/images/logo_sml.png">&nbsp;' . __( 'Allow2', 'allow2_trdom' ) . "</h2>";
     if (!class_exists('UseClientsTimezone')) {
     	?>
     	<div>
-    		WARNING: The Allow2 WP plugin requires <a target="timezoneplugin" href="https://a2wp.mystagingwebsite.com/wp-admin/plugin-install.php?tab=plugin-information&plugin=use-clients-time-zone">Use Client's Time Zone</a>, but it seems to either be missing or not activated.
+    		WARNING: The Allow2 WP plugin requires <a target="timezoneplugin" href="<?php echo $homeUrl; ?>/wp-admin/plugin-install.php?tab=plugin-information&plugin=use-clients-time-zone">Use Client's Time Zone</a>, but it seems to either be missing or not activated.
     		Allow2 will be disabled until it has been correctly installed.
     	</div>
     	<?php
@@ -106,6 +108,14 @@
 					</td>
 				</tr>
 				<tr>
+					<th><label for="allow2_webhook_uri"><?php _e("Webhook Uri :"); ?></label></th>
+					<td aria-live="assertive">
+						<div class="allow2_webhook_uri">
+							<?php echo plugin_dir_url( __FILE__ ) . 'allow2_webhook.php'; ?>
+						</div>
+					</td>
+				</tr>
+				<tr>
 					<th><label for="allow2_redirect_uri"><?php _e("Mode :"); ?></label></th>
 					<td aria-live="assertive">
 						<div class="allow2_sandbox">
@@ -117,6 +127,7 @@
 							}
 							?>
 						</div>
+						<p class="description">This plugin is not yet live, please test in Sandbox mode for now.</p>
 					</td>
 				</tr>
 				<tr>
@@ -144,18 +155,18 @@
 } else {
 ?>
 	<div class="wrap">
-    <?php echo "<h2>" . __( 'Allow2', 'allow2_trdom' ) . "</h2>";
+    <?php echo '<h2><img width=30 height=30 src="https://app.allow2.com/images/logo_sml.png">&nbsp;' . __( 'Allow2', 'allow2_trdom' ) . '</h2>';
     if (!class_exists('UseClientsTimezone')) {
     	?>
     	<div>
-    		WARNING: The Allow2 WP plugin requires <a target="timezoneplugin" href="https://a2wp.mystagingwebsite.com/wp-admin/plugin-install.php?tab=plugin-information&plugin=use-clients-time-zone">Use Client's Time Zone</a>, but it seems to either be missing or not activated.
+    		WARNING: The Allow2 WP plugin requires <a target="timezoneplugin" href="<?php echo $homeUrl; ?>/wp-admin/plugin-install.php?tab=plugin-information&plugin=use-clients-time-zone">Use Client's Time Zone</a>, but it seems to either be missing or not activated.
     		Allow2 will be disabled until it has been correctly installed.
     	</div>
     	<?php
     }
     ?>
     <div>
-        <form name="allow2_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
+        <form id="allow2_connect_form" name="allow2_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
             <input type="hidden" name="allow2_setup" value="Y">
             <table class="form-table">
 				<tr>
@@ -191,12 +202,14 @@
 					</td>
 				</tr>
 				<tr>
-					<th><label for="allow2_redirect_uri"><?php _e("Mode :"); ?></label></th>
+					<th><label for="allow2_sandbox"><?php _e("Mode :"); ?></label></th>
 					<td aria-live="assertive">
 						<div class="allow2_sandbox">
-							<input type="checkbox" name="allow2_sandbox" value="1"<?php checked( $a2sandbox ); ?> />
+							<input type="checkbox" name="allow2_sandbox" value="1" <?php checked( $a2sandbox ); ?> disabled >
 							&nbsp;Sandbox
+							</input>
 						</div>
+						<p class="description">This plugin is not yet live, please test in Sandbox mode for now.</p>
 					</td>
 				</tr>
 
@@ -212,8 +225,21 @@
 			</table>
 
             <p class="submit">
-                <input type="submit" name="Submit" value="<?php _e('Connect', 'allow2_trdom' ) ?>" />
+                <input id="allow2_connect_button" type="submit" name="Submit" value="<?php _e('Connect', 'allow2_trdom' ); ?>" onClick="submitConnect();" />
             </p>
+			<i id="allow2_connect_spinner" class="fa fa-spinner fa-pulse fa-2x" style="display: none;" aria-hidden="true" ></i>
+            
+            <script type="text/javascript">
+            	function submitConnect() {
+            		console.log('connecting...');
+            		var spinner = jQuery('#allow2_connect_spinner');
+					var button = jQuery('#allow2_connect_button');
+					spinner.css("display", "inline-block");
+					button.prop('disabled', true);
+					console.log('connecting...');
+					jQuery('#allow2_connect_form').submit();
+            	}
+            </script>
         </form>
     </div>
 </div>

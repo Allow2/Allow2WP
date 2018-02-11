@@ -22,11 +22,12 @@
 			</div>
 		</div>
 		<script type="text/javascript">
-			var host = "https://a2wp.mystagingwebsite.com"
+			var loc = window.location;
+			var baseUrl = loc.protocol + "//" + loc.hostname + (loc.port? ":"+loc.port : "");
 			window.onload = function() {
 				var result = new RegExp("code=([^&]*)", "i").exec(window.location.search); 
 				var code = result && unescape(result[1]) || ""; 
-				window.opener.postMessage(code, host);
+				window.opener.postMessage(code, baseUrl);
 			};
 		</script>
 	</BODY>

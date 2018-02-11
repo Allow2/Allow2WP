@@ -2,7 +2,7 @@ var allow2Popup = null;
 
 function requestAllow2OauthCode() {
 
-    var host = 'https://app.allow2.com:8443';
+    var host = 'https://app.allow2.com';
 	var OAUTHURL = host + '/oauth2/authorize';
 	var popupurl = OAUTHURL + '?client_id=' + php_data.token + '&redirect_uri=' + encodeURI(php_data.redirect_uri)
 		+ '&response_type=code&user_id=' + php_data.user_id;
@@ -10,12 +10,13 @@ function requestAllow2OauthCode() {
 	var pairButton = jQuery('#allow2-pair-button');
 	allow2Popup = window.open(popupurl, "allow2authwindow", 'width=800, height=600'); 
 	
-	var thisHost = "https://a2wp.mystagingwebsite.com"
+	var loc = window.location;
+	var baseUrl = loc.protocol + "//" + loc.hostname + (loc.port? ":"+loc.port : "");
 	
 	window.addEventListener("message", function(event) {
-	    if (event.origin != thisHost) {
+	    if (event.origin != baseUrl) {
 		    // something from an unknown domain, let's ignore it
-		    console.log('ignore', event.origin);
+		    console.log('ignore', event.origin, baseUrl);
 		    return;
 	    }
 
