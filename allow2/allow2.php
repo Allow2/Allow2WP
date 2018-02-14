@@ -115,6 +115,7 @@ function allow2_user_profile_fields( $user ) {
 		
 			<?php
 			wp_enqueue_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' );
+			wp_enqueue_script( 'qrcode', plugin_dir_url(__FILE__) . 'lib/qrcode.min.js', array('jquery'), '0.1' );
 			wp_enqueue_script( 'allow2oauth2', plugin_dir_url(__FILE__) . 'lib/allow2oauth2.js', array('jquery'), '0.1' );
     		wp_enqueue_script( 'allow2request', plugin_dir_url(__FILE__) . 'lib/allow2request.js', array('jquery'), '0.1' );
 			$php_data = array(
