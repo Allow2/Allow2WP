@@ -162,3 +162,19 @@ function checkAllow2Status() {
 		console.log('catch', e);
 	}
 }
+
+function prepareForQRScan() {
+	var qrData = {
+		client_id: php_data.token,
+		userId: php_data.user_id
+	}	
+	var qrDiv = jQuery('#allow2qrcode');
+	var qrcode = new QRCode(qrDiv, {
+		text: JSON.stringify(qrData),
+		width: 128,
+		height: 128,
+		colorDark : "#000000",
+		colorLight : "#ffffff",
+		correctLevel : QRCode.CorrectLevel.H
+	});
+}

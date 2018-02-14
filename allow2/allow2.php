@@ -111,6 +111,15 @@ function allow2_user_profile_fields( $user ) {
 						<p class="description">Connect this account with Allow2 to control access and usage.</p>
 					</td>
 				</tr>
+				<tr>
+					<th><label for="allow2qrcode">Allow2 QRCode</label></th>
+					<td aria-live="assertive">
+						<div class="allow2qrcode">
+							<div id="allow2qrcode"></div>
+						</div>
+						<p class="description">Scan this with the Allow2 app for fast connection.</p>
+					</td>
+				</tr>
 			</table>
 		
 			<?php
