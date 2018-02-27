@@ -65,8 +65,8 @@ function allow2_user_profile_fields( $user ) {
 			<?php
 		} else {
 			$settings = get_user_meta( $user->ID, 'allow2_settings', true);
-			
-			if (isset($settings["allow2_refresh_token"])) {
+			$connected = isset($settings["allow2_refresh_token"]);
+			if ($connected) {
 				$connectedClasses = "form-table";
 				$connectClasses = "form-table hidden";
 			} else {
@@ -117,7 +117,7 @@ function allow2_user_profile_fields( $user ) {
 						<div class="allow2qrcode">
 							<div id="allow2qrcode"></div>
 						</div>
-						<p class="description">Scan this with the Allow2 app for fast connection.</p>
+						<p class="description">Scan this QR code with the Allow2 app for fast connection.</p>
 					</td>
 				</tr>
 			</table>

@@ -46,6 +46,7 @@ function requestAllow2OauthCode() {
 					allow2Popup.close();
 					jQuery('#allow2Connected').removeClass('hidden');
 					jQuery('#allow2Connect').addClass('hidden');
+					//prepareForQRScan();
 					return;
 				}
 				allow2Popup.location.href='/wp-content/plugins/allow2/allow2_error.php?test=1';
@@ -164,17 +165,22 @@ function checkAllow2Status() {
 }
 
 function prepareForQRScan() {
+	console.log('preparing QR code');
 	var qrData = {
-		client_id: php_data.token,
+		clientId: php_data.token,
 		userId: php_data.user_id
 	}	
-	var qrDiv = jQuery('#allow2qrcode');
+	var qrDiv = document.getElementById("allow2qrcode"); //jQuery('#allow2qrcode');
 	var qrcode = new QRCode(qrDiv, {
 		text: JSON.stringify(qrData),
-		width: 128,
-		height: 128,
+		width: 192,
+		height: 192,
 		colorDark : "#000000",
 		colorLight : "#ffffff",
 		correctLevel : QRCode.CorrectLevel.H
 	});
 }
+
+jQuery( document ).ready(function() {
+	prepareForQRScan();
+});
