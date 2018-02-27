@@ -1,12 +1,12 @@
 <?php
 
 	$homeUrl = get_home_url();
-    $host = 'https://app.allow2.com';
+    $host = 'https://api.allow2.com';
     if($_POST['allow2_setup'] == 'Y') {
         //Form data sent
         $a2token = $_POST['allow2_token'];
         $a2secret = $_POST['allow2_secret'];
-		$a2sandbox = '1'; //$_POST['allow2_sandbox'];
+		$a2sandbox = '0'; //$_POST['allow2_sandbox'];
 		
         $params = [
             'token' => $a2token,
@@ -69,7 +69,7 @@
     if ($a2userId) {
 ?>
 <div class="wrap">
-    <?php echo '<h2><img width=30 height=30 src="https://app.allow2.com/images/logo_sml.png">&nbsp;' . __( 'Allow2', 'allow2_trdom' ) . "</h2>";
+    <?php echo '<h2><img width=30 height=30 src="https://api.allow2.com/images/logo_sml.png">&nbsp;' . __( 'Allow2', 'allow2_trdom' ) . "</h2>";
     if (!class_exists('UseClientsTimezone')) {
     	?>
     	<div>
@@ -155,7 +155,7 @@
 } else {
 ?>
 	<div class="wrap">
-    <?php echo '<h2><img width=30 height=30 src="https://app.allow2.com/images/logo_sml.png">&nbsp;' . __( 'Allow2', 'allow2_trdom' ) . '</h2>';
+    <?php echo '<h2><img width=30 height=30 src="https://api.allow2.com/images/logo_sml.png">&nbsp;' . __( 'Allow2', 'allow2_trdom' ) . '</h2>';
     if (!class_exists('UseClientsTimezone')) {
     	?>
     	<div>
@@ -191,6 +191,7 @@
 						<div class="allow2_redirect_uri">
 							<?php echo plugin_dir_url( __FILE__ ) . 'allow2_oauth2callback.php'; ?>
 						</div>
+						<!-- <button class="btn" data-clipboard-target=".allow2_redirect_uri">Copy to Clipboard</button> -->
 					</td>
 				</tr>
 				<tr>
@@ -199,17 +200,7 @@
 						<div class="allow2_webhook_uri">
 							<?php echo plugin_dir_url( __FILE__ ) . 'allow2_webhook.php'; ?>
 						</div>
-					</td>
-				</tr>
-				<tr>
-					<th><label for="allow2_sandbox"><?php _e("Mode :"); ?></label></th>
-					<td aria-live="assertive">
-						<div class="allow2_sandbox">
-							<input type="checkbox" name="allow2_sandbox" value="1" <?php checked( $a2sandbox ); ?> disabled >
-							&nbsp;Sandbox
-							</input>
-						</div>
-						<p class="description">This plugin is not yet live, please test in Sandbox mode for now.</p>
+						<!-- <button class="btn" data-clipboard-target=".allow2_webhook_uri">Copy to Clipboard</button>-->
 					</td>
 				</tr>
 
@@ -217,8 +208,7 @@
 					<th></th>
 					<td aria-live="assertive">
 						<p class="description">These all need to match the entry in your
-							<a target="Allow2" href="https://staging-developer.allow2.com/">Allow2 <b>Sandbox</b> service settings</a> or
-							<a target="Allow2" href="https://developer.allow2.com/">Allow2 <b>Production</b> service settings</a>.
+							<a target="Allow2" href="https://developer.allow2.com/">Allow2 service settings</a>.
 						</p>
 					</td>
 				</tr>
@@ -244,5 +234,6 @@
     </div>
 </div>
 <?php
+		wp_enqueue_script( 'clipboard', plugin_dir_url(__FILE__) . 'lib/clipboard.min.js', array('jquery'), '0.1' );
     }
 ?>

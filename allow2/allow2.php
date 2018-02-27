@@ -47,7 +47,7 @@ function allow2_user_profile_fields( $user ) {
 	$a2token = get_option('allow2_token', '');
     $a2userId = get_option('allow2_userId');
     $a2sandbox = get_option('allow2_sandbox', false);
-    $host = 'https://app.allow2.com';
+    $host = 'https://api.allow2.com';
     if (($a2userId) && class_exists('UseClientsTimezone')){
 		?>
 		<h3><?php
@@ -169,9 +169,9 @@ function set_allow2_oauth2_token($grantCode, $grantType) {
 	}
 
     // $a2sandbox = get_option('allow2_sandbox', false);
-//     $host = 'https://app.allow2.com:8443';
-    // $oauth2token_url = 'https://app.allow2.com:8443/oauth2/token';
-    $oauth2token_url = 'https://app.allow2.com/oauth2/token';
+//     $host = 'https://api.allow2.com';
+    // $oauth2token_url = 'https://api.allow2.com:8443/oauth2/token';
+    $oauth2token_url = 'https://api.allow2.com/oauth2/token';
     
     $clienttoken_post = array(
     	"client_id" => get_option('allow2_token', false),
@@ -305,8 +305,8 @@ function allow2_check_status() {
 	}
 	
 	$a2sandbox = get_option('allow2_sandbox', false);
-	$host = 'https://app.allow2.com';
-	$oauth2check_url = 'https://app.allow2.com/oauth2/checkStatus';
+	$host = 'https://api.allow2.com';
+	$oauth2check_url = 'https://api.allow2.com/oauth2/checkStatus';
 	
 	// ok, all good, hit the Allow2 server to verify current status for this user
 	$postData['refreshToken'] = $settings['allow2_refresh_token'];
@@ -383,7 +383,7 @@ function allow2_start_request() {
 	}
 	
 	$a2sandbox = get_option('allow2_sandbox', false);
-	$host = 'https://app.allow2.com';
+	$host = 'https://api.allow2.com';
 
 	$tempToken_url = $host . '/request/tempToken';
 	
@@ -516,7 +516,7 @@ function allow2_checkAndLog() {
 			)
 		);
 		$a2sandbox = get_option('allow2_sandbox', false);
-		$serviceHost = 'https://api.allow2.com';
+		$serviceHost = 'https://service.allow2.com';
 		
 		$url = $serviceHost . '/serviceapi/check';
 

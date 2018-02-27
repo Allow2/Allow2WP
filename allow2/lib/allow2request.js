@@ -52,7 +52,7 @@ function startAllow2Request() {
 
 function makeAllow2Request(tempToken, secretToken) {
 	
-	var host = 'https://app.allow2.com:8443';
+	var host = 'https://api.allow2.com';
 	var requestURL = host + '/request/newRequest?a=' + tempToken + '&b=' + secretToken;
 	var allow2RequestPopup = window.open(requestURL, "allow2requestwindow", 'width=800,height=600'); 
 	console.log(requestURL, allow2RequestPopup);

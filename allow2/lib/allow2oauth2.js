@@ -2,7 +2,7 @@ var allow2Popup = null;
 
 function requestAllow2OauthCode() {
 
-    var host = 'https://app.allow2.com';
+    var host = 'https://api.allow2.com';
 	var OAUTHURL = host + '/oauth2/authorize';
 	var popupurl = OAUTHURL + '?client_id=' + php_data.token + '&redirect_uri=' + encodeURI(php_data.redirect_uri)
 		+ '&response_type=code&user_id=' + php_data.user_id;

@@ -6,7 +6,7 @@ First you need to set up Allow2 to know about the service and allow connections 
 
 As the administrator or developer of the site on which you wish to integrate Allow2:
 
-1) Go to https://app.allow2.com/dev/services (Select "Activate Developer Controls" if not already activated).
+1) Go to https://developer.allow2.com/dev/services (Select "Activate Developer Controls" if not already activated).
 2) Create a new service, name it according to your web site or service
 	eg: "Facebook"
 		"Twitter"
