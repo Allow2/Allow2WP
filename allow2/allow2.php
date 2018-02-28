@@ -1,26 +1,24 @@
 <?php
-/*
-Plugin Name: Allow2
-Plugin URI: http://wordpress.org/extend/plugins/allow2/
-Description: Controls access rights for each account based on the settings on the allow2 service. Allow2 provides comprehensive universal child access controls to assist in curbing overuse of gaming/internet and other technologies
-Version: 1.0.0
-Author: Allow2 Pty Ltd
-Author URI: http://www.allow2.com/
-*/
-
-// todo: fix the license
-/*
-    Copyright 2016 Allow2 Pty Ltd
-
-    This is the first demo project for the Allow2 Web Service.
-
-	It provides a concrete example of how to perform a full-featured integration with the
-	Allow2 service via the Allow2 Service API.
-
-	Please refer to LICENSE.md and the license available at http://www.allow2.com/developer-license/
-	for more information
-	
-*/
+/**
+ * Plugin Name
+ *
+ * @package     Allow2
+ * @author      Allow2 Pty Ltd
+ * @copyright   2016 Allow2 Pty Ltd
+ * @license     https://www.allow2.com/developer-license/
+ *
+ * @wordpress-plugin
+ * Plugin Name: Allow2
+ * Plugin URI:  https://www.github.com/Allow2/Allow2WP
+ * Description: The Allow2 WordPress plugin is a simple plug and play drop in component that empowers your site to offer full parental freedom.
+ * Version:     1.0.0
+ * Author:      Andrew Longhorn
+ * Author URI:  https://www.allow2.com
+ * Text Domain: allow2
+ * License:     Similar to Apache 2.0
+ * License URI: https://www.allow2.com/developer-license/
+ */
+ 
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
