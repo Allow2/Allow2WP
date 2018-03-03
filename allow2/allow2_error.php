@@ -1,3 +1,6 @@
+<?php
+    if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+?>
 <HTML>
 	<HEAD>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">

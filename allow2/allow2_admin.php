@@ -1,5 +1,6 @@
 <?php
-
+    if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+    
 	$homeUrl = get_home_url();
     $host = 'https://api.allow2.com';
     if($_POST['allow2_setup'] == 'Y') {
@@ -127,7 +128,7 @@
 							}
 							?>
 						</div>
-						<p class="description">This plugin is not yet live, please test in Sandbox mode for now.</p>
+						<!-- <p class="description">This plugin is not yet live, please test in Sandbox mode for now.</p> -->
 					</td>
 				</tr>
 				<tr>
@@ -137,7 +138,7 @@
 							<?php if ($a2sandbox) { ?>
 								<a target="Allow2" href="https://staging-developer.allow2.com/">Allow2 <b>Sandbox</b> service settings</a>.
 							<?php } else { ?>
-								<a target="Allow2" href="https://developer.allow2.com/">Allow2 <b>Production</b> service settings</a>.
+								<a target="Allow2" href="https://developer.allow2.com/">Allow2 service settings</a>.
 							<?php } ?>
 						</p>
 					</td>
@@ -215,12 +216,12 @@
 			</table>
 
             <p class="submit">
-                <input id="allow2_connect_button" type="submit" name="Submit" value="<?php _e('Connect', 'allow2_trdom' ); ?>" onClick="submitConnect();" />
+                <input id="allow2_connect_button" type="submit" name="Submit" value="<?php _e('Connect', 'allow2_trdom' ); ?>" onClick="allow2_submitConnect();" />
             </p>
 			<i id="allow2_connect_spinner" class="fa fa-spinner fa-pulse fa-2x" style="display: none;" aria-hidden="true" ></i>
             
             <script type="text/javascript">
-            	function submitConnect() {
+            	function allow2_submitConnect() {
             		console.log('connecting...');
             		var spinner = jQuery('#allow2_connect_spinner');
 					var button = jQuery('#allow2_connect_button');

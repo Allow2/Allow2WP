@@ -19,8 +19,8 @@
  * License URI: https://www.allow2.com/developer-license/
  */
  
-
-defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+//defined( 'ABSPATH' ) or die( 'No script kiddies please!' ); ??
 
 
 /**
@@ -140,7 +140,7 @@ function allow2_finish_code_exchange() {
 	
 	// ok, all good, extract the auth_code and send to our reusable function
 	$auth_code = $_POST['auth_code'];
-  	$token = set_allow2_oauth2_token($auth_code, 'auth_code');
+  	$token = allow2_set_oauth2_token($auth_code, 'auth_code');
   	if ( $token != false ) {
   		echo '{ "status": "success" }';
   	} else {
@@ -154,7 +154,7 @@ function allow2_finish_code_exchange() {
  * this gets the initial token given an auth code, or
  * uses the refresh token to get a new token
  */
-function set_allow2_oauth2_token($grantCode, $grantType) {
+function allow2_set_oauth2_token($grantCode, $grantType) {
 	// based on http://ieg.wnet.org/2015/09/using-oauth-in-wordpress-plugins-part-2-persistence/
     $user_id = get_current_user_id();
     if ( $user_id < 1 ) {
@@ -241,11 +241,11 @@ function set_allow2_oauth2_token($grantCode, $grantType) {
 }
 
 /**
- * get_allow2_access_token
+ * allow2_get_access_token
  *
  * use this any time we need to use the api to make sure we have a current non-expired token
  */
-function get_allow2_access_token() {
+function allow2_get_access_token() {
     $user_id = get_current_user_id();
     if ( $user_id < 1 ) { return false; }
 
@@ -263,7 +263,7 @@ function get_allow2_access_token() {
     }
     
     // at this point we have an expiration time but it is in the past or will be very soon
-    return set_allow2_oauth2_token(null, 'refresh_token');
+    return allow2_set_oauth2_token(null, 'refresh_token');
 }
 
 /**
@@ -427,7 +427,7 @@ function allow2_start_request() {
 }
 
 
-function log_me($message) {
+function allow2_log_me($message) {
     if (WP_DEBUG === true) {
         if (is_array($message) || is_object($message)) {
             error_log(print_r($message, true));
@@ -504,7 +504,7 @@ function allow2_checkAndLog() {
 		// and cannot understand the string '1' is a string!
 		//
 		$params = array(
-			'access_token' => get_allow2_access_token(),
+			'access_token' => allow2_get_access_token(),
 			'tz' => 'Australia/Brisbane',		// todo: send the users timezone
 			'activities' => array(
 				array(
