@@ -44,7 +44,6 @@ add_action( 'edit_user_profile', 'allow2_user_profile_fields' );
 function allow2_user_profile_fields( $user ) { 
 	$a2token = get_option('allow2_token', '');
     $a2userId = get_option('allow2_userId');
-    $a2sandbox = get_option('allow2_sandbox', false);
     $host = 'https://api.allow2.com';
     if (($a2userId) && class_exists('UseClientsTimezone')){
 		?>
@@ -166,9 +165,6 @@ function allow2_set_oauth2_token($grantCode, $grantType) {
 		$settings = [];
 	}
 
-    // $a2sandbox = get_option('allow2_sandbox', false);
-//     $host = 'https://api.allow2.com';
-    // $oauth2token_url = 'https://api.allow2.com:8443/oauth2/token';
     $oauth2token_url = 'https://api.allow2.com/oauth2/token';
     
     $clienttoken_post = array(
@@ -302,7 +298,6 @@ function allow2_check_status() {
 		return false;
 	}
 	
-	$a2sandbox = get_option('allow2_sandbox', false);
 	$host = 'https://api.allow2.com';
 	$oauth2check_url = 'https://api.allow2.com/oauth2/checkStatus';
 	
@@ -380,7 +375,7 @@ function allow2_start_request() {
 		return;
 	}
 	
-	$a2sandbox = get_option('allow2_sandbox', false);
+
 	$host = 'https://api.allow2.com';
 
 	$tempToken_url = $host . '/request/tempToken';
@@ -513,7 +508,6 @@ function allow2_checkAndLog() {
 				)
 			)
 		);
-		$a2sandbox = get_option('allow2_sandbox', false);
 		$serviceHost = 'https://service.allow2.com';
 		
 		$url = $serviceHost . '/serviceapi/check';

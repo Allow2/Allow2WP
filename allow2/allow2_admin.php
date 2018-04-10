@@ -27,7 +27,6 @@
         //Form data sent
         $a2token = $_POST['allow2_token'];
         $a2secret = $_POST['allow2_secret'];
-		$a2sandbox = '0'; //$_POST['allow2_sandbox'];
 		
         $params = [
             'token' => $a2token,
@@ -54,13 +53,11 @@
             ?>
             <div class="error"><p><strong><?php _e( 'Incorrect Token, Secret or Redirect URI' ); ?></strong></p></div>
             <?php
-            echo $_POST['allow2_sandbox'];
         } else {
             $obj = json_decode($response_body, true);
             $a2userId = $obj["accountId"];
             update_option('allow2_token', $a2token);
             update_option('allow2_secret', $a2secret);
-            update_option('allow2_sandbox', $a2sandbox);
             update_option('allow2_userId', $a2userId);
             ?>
             <div class="updated"><p><strong><?php _e('Connected to Allow2.' ); ?></strong></p></div>
@@ -72,18 +69,15 @@
     } else if($_POST['allow2_disconnect'] == 'Y') {
         $a2token = '';
         $a2secret = '';
-        $a2sandbox = true;
         $a2userId = false;
         update_option('allow2_token', $a2token);
         update_option('allow2_secret', $a2secret);
-        update_option('allow2_sandbox', $a2sandbox);
         update_option('allow2_userId', $a2userId);
         
     } else {
         //Normal page display
         $a2token = get_option('allow2_token', '');
         $a2secret = get_option('allow2_secret', '');
-        $a2sandbox = get_option('allow2_sandbox', true);
         $a2userId = get_option('allow2_userId');
     }
 
@@ -137,29 +131,10 @@
 					</td>
 				</tr>
 				<tr>
-					<th><label for="allow2_redirect_uri"><?php _e("Mode :"); ?></label></th>
-					<td aria-live="assertive">
-						<div class="allow2_sandbox">
-							<?php 
-							if ($a2sandbox) {
-								echo 'Sandbox';
-							} else {
-								echo 'Production';
-							}
-							?>
-						</div>
-						<!-- <p class="description">This plugin is not yet live, please test in Sandbox mode for now.</p> -->
-					</td>
-				</tr>
-				<tr>
 					<th></th>
 					<td aria-live="assertive">
 						<p class="description">These all need to match the entry in your
-							<?php if ($a2sandbox) { ?>
-								<a target="Allow2" href="https://staging-developer.allow2.com/">Allow2 <b>Sandbox</b> service settings</a>.
-							<?php } else { ?>
-								<a target="Allow2" href="https://developer.allow2.com/">Allow2 service settings</a>.
-							<?php } ?>
+							<a target="Allow2" href="https://developer.allow2.com/">Allow2 service settings</a>.
 						</p>
 					</td>
 				</tr>
