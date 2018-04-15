@@ -1,5 +1,4 @@
-allow2WP
-========
+# Allow2WP
 
 This is the first demo project for the Allow2 Web Service.
 
@@ -16,8 +15,9 @@ The intention, by open-sourcing, is to:
 Note that all Allow2 API/SDK and other open-source components are subject to the same permissive use license as detailed in LICENSE.md
 The full license is available here: http://www.allow2.com/developer-license/
 
+## Usage / Documentation:
+See the [Allow2WP Wiki](https://github.com/Allow2/Allow2WP/wiki)
 
-Requires:
----------
+## Requires:
 
 ** Uses Client's Time Zone ** : [https://wordpress.org/plugins/use-clients-time-zone/](https://wordpress.org/plugins/use-clients-time-zone/)
