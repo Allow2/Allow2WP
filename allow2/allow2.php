@@ -155,10 +155,9 @@ function allow2_user_profile_fields($user) {
 add_action('wp_ajax_allow2_finish_code_exchange', 'allow2_finish_code_exchange');
 
 function allow2_finish_code_exchange() {
-  // todo: verify the nonce
+
   $user_id = get_current_user_id();
   check_ajax_referer('allow2_nonce_' . $user_id, 'nonce');
-
 
   /* check nonce nonce from form or die() */
   if (!isset($_POST['a2_fce_n']) || !wp_verify_nonce(esc_attr($_POST['a2_fce_n']), 'allow2_finish_code_exchange')) {
@@ -305,7 +304,7 @@ function allow2_get_access_token() {
 add_action('wp_ajax_allow2_check_status', 'allow2_check_status');
 
 function allow2_check_status() {
-  // todo: verify the nonce
+    
   $user_id = get_current_user_id();
   check_ajax_referer('allow2_nonce_' . $user_id, 'nonce');
 
