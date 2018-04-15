@@ -36,6 +36,9 @@ If your site wants more members, then provide the controls parents want to remov
 When you create the service in your Allow2 developer account, name it according to your web site name to allow Parents to identify the website when they connect the account.
 
 == Screenshots ==
+1. Connecting the site to Allow2
+2. Site Connected
+3. User Profile pairing with Allow2
 
 == Changelog ==
 1.0.1
