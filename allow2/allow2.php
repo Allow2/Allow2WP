@@ -116,7 +116,7 @@ function allow2_user_profile_fields($user) {
             </tr>
         </table>
 
-        <table id="allow2Connect" class="<?php echo  esc_attr($connectClasses) ?>">
+        <table id="allow2Connect" class="<?php echo esc_attr($connectClasses) ?>">
             <tr>
                 <th><label for="allow2connect">Connect with Allow2</label></th>
                 <td aria-live="assertive">
@@ -185,11 +185,11 @@ function allow2_set_oauth2_token($grantCode, $grantType) {
   $oauth2token_url = 'https://api.allow2.com/oauth2/token';
 
   $clienttoken_post = array(
-    "allow2_client_id" => get_option('allow2_token', false),
-    "allow2_client_secret" => get_option('allow2_secret', false)
+    "client_id" => get_option('allow2_token', false),
+    "client_secret" => get_option('allow2_secret', false)
   );
 
-  if (!$clienttoken_post['allow2_client_id'] || !$clienttoken_post['allow2_client_secret']) {
+  if (!$clienttoken_post['client_id'] || !$clienttoken_post['client_secret']) {
     return false;
   }
 
@@ -221,7 +221,7 @@ function allow2_set_oauth2_token($grantCode, $grantType) {
       // so we need to erase that connection and free up this account
       delete_user_meta($user_id, 'allow2_settings');
     }
-    return $httpCode; // false
+    return false; // $httpCode  false
   }
 
   $authObj = json_decode($response_body, true);
@@ -297,13 +297,13 @@ function allow2_check_status() {
   $user_id = get_current_user_id();
   check_ajax_referer('allow2_nonce_' . $user_id, 'nonce');
   $postData = array(
-    "allow2_client_id" => get_option('allow2_token', false),
-    "allow2_client_secret" => get_option('allow2_secret', false)
+    "client_id" => get_option('allow2_token', false),
+    "client_secret" => get_option('allow2_secret', false)
   );
   /*var_dump($postData);
   die();*/
   // not using allow2, clear the user settings
-  if (!$postData['allow2_client_id'] || !$postData['allow2_client_secret']) {
+  if (!$postData['client_id'] || !$postData['client_secret']) {
     delete_user_meta($user_id, 'allow2_settings');
     status_header(403);
     echo '{ "status" : "allow2 not in use" }';
@@ -375,12 +375,12 @@ function allow2_start_request() {
     $nonce = $_POST['_wpnonce'];
 
   $postData = array(
-    "allow2_client_id" => get_option('allow2_token', false),
-    "allow2_client_secret" => get_option('allow2_secret', false),
+    "client_id" => get_option('allow2_token', false),
+    "client_secret" => get_option('allow2_secret', false),
     "serviceToken" => $nonce
   );
   // not using allow2, reject the request and clear settings for the user
-  if (!$postData['allow2_client_id'] || !$postData['allow2_client_secret']) {
+  if (!$postData['client_id'] || !$postData['client_secret']) {
     delete_user_meta($user_id, 'allow2_settings');
     http_response_code(403);
     echo '{"status":"Allow2 not in use"}';
