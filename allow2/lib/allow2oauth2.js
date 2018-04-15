@@ -38,7 +38,7 @@ function requestAllow2OauthCode() {
       dataType: 'json',
       error: function (jqXHR, textStatus, errorThrown) {
         console.log(jqXHR, textStatus, errorThrown);
-        allow2Popup.location.href = '?allow2_callback=error';
+        allow2Popup.location.href = '/?allow2_callback=error';
       },
       success: function (response, textStatus, jqXHR) {
         console.log(response, textStatus, jqXHR);
@@ -48,7 +48,7 @@ function requestAllow2OauthCode() {
           jQuery('#allow2Connect').addClass('hidden');
           return;
         }
-        allow2Popup.location.href = '?allow2_callback=error';
+        allow2Popup.location.href = '/?allow2_callback=error';
       }
     });
   });
@@ -75,7 +75,7 @@ function requestAllow2OauthCode() {
 // 					dataType: 'json',
 // 					error: function( jqXHR, textStatus, errorThrown ) {
 // 						console.log(jqXHR, textStatus, errorThrown);
-// 						//allow2Popup.location.href='?allow2_callback=error';
+// 						//allow2Popup.location.href='/?allow2_callback=error';
 // 					},
 // 					success: function( response, textStatus, jqXHR ) {
 // 						console.log(response, textStatus, jqXHR);
@@ -85,7 +85,7 @@ function requestAllow2OauthCode() {
 // 							jQuery('#allow2Connect').addClass('hidden');
 // 							return;
 // 						}
-// 						//allow2Popup.location.href='?allow2_callback=error';
+// 						//allow2Popup.location.href='/?allow2_callback=error';
 // 					}
 // 				});
 // 			}
