@@ -1,56 +1,25 @@
 <?php
 /**
- * Plugin Name
  *
  * @package     Allow2
  * @author      Allow2 Pty Ltd
  * @copyright   2016 Allow2 Pty Ltd
  * @license     https://www.allow2.com/developer-license/
  *
- * @wordpress-plugin
- * Plugin Name: Allow2
- * Plugin URI:  https://www.github.com/Allow2/Allow2WP
- * Description: The Allow2 WordPress plugin is a simple plug and play drop in component that empowers your site to offer full parental freedom.
- * Version:     1.0.0
- * Author:      Andrew Longhorn
- * Author URI:  https://www.allow2.com
- * Text Domain: allow2
- * License:     Similar to Apache 2.0
- * License URI: https://www.allow2.com/developer-license/
  */
-    if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
 ?>
-<HTML>
-	<HEAD>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-		<?php $host = 'https://api.allow2.com'; ?>
-		<link rel="stylesheet" type="text/css" href="<?php echo $host; ?>/css/styles.css">
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	</HEAD>
-	<BODY>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="jumbotron">
-						<h1 class="display-3">Pairing...</h1>
-						<p class="lead">
-							<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-		<script type="text/javascript">
-			var loc = window.location;
-			var baseUrl = loc.protocol + "//" + loc.hostname + (loc.port? ":"+loc.port : "");
-			window.onload = function() {
-				var result = new RegExp("code=([^&]*)", "i").exec(window.location.search); 
-				var code = result && unescape(result[1]) || ""; 
-				window.opener.postMessage(code, baseUrl);
-			};
-		</script>
-	</BODY>
-</HTML>
+<div class="container" style="text-align: center;">
+    <p>&nbsp;</p>
+    <h1><img width=30 height=30 src="<?= plugin_dir_url(__FILE__) ?>assets/icon-30x30.png"> Allow2</h1>
+    <h2 class="display-3">Pairing... &nbsp;<img style="max-width: 100%;, height: auto;" src="/wp-admin/images/wpspin_light.gif" alt=""></h2>
+</div>
+<script type="text/javascript">
+  var loc = window.location;
+  var baseUrl = loc.protocol + "//" + loc.hostname + (loc.port ? ":" + loc.port : "");
+  window.onload = function () {
+    var result = new RegExp("code=([^&]*)", "i").exec(window.location.search);
+    var code = result && unescape(result[1]) || "";
+    window.opener.postMessage(code, baseUrl);
+  };
+</script>
