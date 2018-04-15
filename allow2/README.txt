@@ -14,13 +14,15 @@ Allow2 Parental Freedom Platform
 The Allow2 WordPress plugin is a simple plug and play drop in component that empowers your site to offer full parental freedom.
 
 == Description ==
-Allow2 provides comprehensive parental controls for free.
+Allow2 provides comprehensive parental freedom for free.
 
 Add this plugin and every account on your site can be linked to the Allow2 Parental Freedom Platform.
 
 Why would you want this?
 
-Parents are under attack from every angle with technology. Everyone is so scared of screen time addiction and overuse of social networks and addictive gaming that they are simply spending less and saying \"no\". They don\'t have the time or energy (nor the knowledge or desire) to fight with this barrage, so they simply avoid the problem.
+75% of US families try to impose restrictions on electronic devices and internet, so NOT providing this capability reduces your potential users.
+
+Parents are under attack from every angle with technology. Everyone is so scared of screen time addiction and overuse of social networks and addictive gaming that they are simply spending less and saying \"no\". They don\'t have the time or energy (nor the knowledge or desire) to fight with this barrage, so they simply avoid the problem by NOT using games and sites that do not provide the controls they need.
 
 Our mission is to remove fear and friction in the home. By providing comprehensive and powerful parental controls, we remove the fear and time overheads, and allow parents to purchase more gamed, allow social account creation and relax with messaging with no guilt.
 
@@ -36,8 +38,8 @@ When you create the service in your Allow2 developer account, name it according 
 == Screenshots ==
 
 == Changelog ==
-1.0.0
+1.0.1
 Initial Release
 
 == Upgrade Notice ==
-Allow2 provides Parental Freedom
+Allow2 provides unique Parental Freedom and boosts your user numbers
