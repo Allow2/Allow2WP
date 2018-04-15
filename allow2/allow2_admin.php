@@ -14,14 +14,14 @@ $homeUrl = get_home_url();
 $host = 'https://api.allow2.com';
 if ($_POST['allow2_setup'] == 'Y') {
 
-  /* check nonce nonce from form or die() */
+  /* check nonce from form or die() */
   if (!isset($_POST['allow2_form_nonce']) || !wp_verify_nonce($_POST['allow2_form_nonce'], 'allow2_form_submit')) {
     die("Please refresh page and try again.");
   }
 
   //Form data sent
-  $a2token = $_POST['allow2_token'];
-  $a2secret = $_POST['allow2_secret'];
+  $a2token = esc_attr($_POST['allow2_token']);
+  $a2secret = esc_attr($_POST['allow2_secret']);
 
   $params = [
     'token' => $a2token,
@@ -62,6 +62,12 @@ if ($_POST['allow2_setup'] == 'Y') {
 
   <?php
 } else if ($_POST['allow2_disconnect'] == 'Y') {
+
+  /* check nonce from form or die() */
+  if (!isset($_POST['allow2_form_nonce']) || !wp_verify_nonce($_POST['allow2_form_nonce'], 'allow2_form_submit')) {
+    die("Please refresh page and try again.");
+  }
+
   $a2token = '';
   $a2secret = '';
   $a2userId = false;
@@ -91,6 +97,7 @@ if ($a2userId) {
       ?>
         <div>
             <form name="allow2_form" method="post" action="<?php echo str_replace('%7E', '~', $_SERVER['REQUEST_URI']); ?>">
+              <?php wp_nonce_field('allow2_form_submit', 'allow2_form_nonce'); ?>
                 <input type="hidden" name="allow2_disconnect" value="Y">
                 <table class="form-table">
                     <tr>

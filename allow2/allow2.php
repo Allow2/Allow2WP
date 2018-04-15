@@ -40,13 +40,15 @@ add_action('admin_menu', 'allow2_admin_actions');
  */
 add_action('wp_loaded', 'a2check_callback');
 function a2check_callback() {
+
+  /* no need to sanitise this one */
   if (isset($_GET['allow2_callback']) && current_user_can('read')) {
 
     wp_head();
     if ($_GET['allow2_callback'] === 'oauth') {
       include('allow2_oauth2callback.php');
     } elseif ($_GET['allow2_callback'] === 'error') {
-      /* todo: match this with correct error handling */
+      /* todo: match this with correct error handling - extra get vars */
       include('allow2_error.php');
     }
 
@@ -134,6 +136,9 @@ function allow2_user_profile_fields($user) {
       $php_data = array(
         'user_id' => $user->ID,
         'nonce' => wp_create_nonce('allow2_nonce_' . $user->ID),
+        'a2_sr_n' => wp_create_nonce('allow2_start_request'),
+        'a2_cs_n' => wp_create_nonce('allow2_check_status'),
+        'a2_fce_n' => wp_create_nonce('allow2_finish_code_exchange'),
         'token' => get_option('allow2_token', true),
         'redirect_uri' => site_url() . '?allow2_callback=oauth'
       );
@@ -154,8 +159,15 @@ function allow2_finish_code_exchange() {
   $user_id = get_current_user_id();
   check_ajax_referer('allow2_nonce_' . $user_id, 'nonce');
 
+
+  /* check nonce nonce from form or die() */
+  if (!isset($_POST['a2_fce_n']) || !wp_verify_nonce(esc_attr($_POST['a2_fce_n']), 'allow2_finish_code_exchange')) {
+    echo '{ "status": "nonce error" }';
+    exit;
+  }
+
   // ok, all good, extract the auth_code and send to our reusable function
-  $auth_code = $_POST['auth_code'];
+  $auth_code = esc_attr($_POST['auth_code']);
   $token = allow2_set_oauth2_token($auth_code, 'auth_code');
   if ($token != false) {
     echo '{ "status": "success" }';
@@ -296,6 +308,13 @@ function allow2_check_status() {
   // todo: verify the nonce
   $user_id = get_current_user_id();
   check_ajax_referer('allow2_nonce_' . $user_id, 'nonce');
+
+  /* check nonce nonce from form or die() */
+  if (!isset($_POST['a2_cs_n']) || !wp_verify_nonce(esc_attr($_POST['a2_cs_n']), 'allow2_check_status')) {
+    echo '{ "status": "nonce error" }';
+    exit;
+  }
+
   $postData = array(
     "client_id" => get_option('allow2_token', false),
     "client_secret" => get_option('allow2_secret', false)
@@ -362,17 +381,24 @@ function allow2_start_request() {
   $user_id = get_current_user_id();
   check_ajax_referer('allow2_nonce_' . $user_id, 'nonce');
 
+
+  /* check nonce nonce from form or die() */
+  if (!isset($_POST['a2_sr_n']) || !wp_verify_nonce(esc_attr($_POST['a2_sr_n']), 'allow2_start_request')) {
+    echo '{ "status": "nonce error" }';
+    exit;
+  }
+
   //
   // grab the valid nonce
   //
   $nonce = '';
   $query_arg = 'nonce';
   if ($query_arg && isset($_POST[$query_arg]))
-    $nonce = $_POST[$query_arg];
+    $nonce = esc_attr($_POST[$query_arg]);
   elseif (isset($_POST['_ajax_nonce']))
-    $nonce = $_POST['_ajax_nonce'];
+    $nonce = esc_attr($_POST['_ajax_nonce']);
   elseif (isset($_POST['_wpnonce']))
-    $nonce = $_POST['_wpnonce'];
+    $nonce = esc_attr($_POST['_wpnonce']);
 
   $postData = array(
     "client_id" => get_option('allow2_token', false),

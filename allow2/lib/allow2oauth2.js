@@ -28,6 +28,7 @@ function requestAllow2OauthCode() {
     var data = {
       action: 'allow2_finish_code_exchange',
       nonce: php_data.nonce,
+      a2_fce_n: php_data.a2_fce_n,
       auth_code: allow2_auth_code
     };
     console.log('ajaxurl', ajaxurl, 'data', data);
@@ -119,7 +120,8 @@ function gup(url, name) {
 function checkAllow2Status() {
   var data = {
     action: 'allow2_check_status',
-    nonce: php_data.nonce
+    nonce: php_data.nonce,
+    a2_cs_n: php_data.a2_cs_n
   };
   var spinner = jQuery('#allow2_status_check_spinner');
   var button = jQuery('#allow2_status_button');
