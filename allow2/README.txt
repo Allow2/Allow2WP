@@ -38,7 +38,7 @@ When you create the service in your Allow2 developer account, name it according 
 == Screenshots ==
 1. Connecting the site to Allow2
 2. Site Connected
-3. User Profile pairing with Allow2
+3. User Profile paired with Allow2
 
 == Changelog ==
 1.0.1
