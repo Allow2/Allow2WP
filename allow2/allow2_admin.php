@@ -20,8 +20,8 @@ if ($_POST['allow2_setup'] == 'Y') {
   }
 
   //Form data sent
-  $a2token = esc_attr($_POST['allow2_token']);
-  $a2secret = esc_attr($_POST['allow2_secret']);
+  $a2token = sanitize_text_field($_POST['allow2_token']);
+  $a2secret = sanitize_text_field($_POST['allow2_secret']);
 
   $params = [
     'token' => $a2token,
@@ -51,9 +51,9 @@ if ($_POST['allow2_setup'] == 'Y') {
   } else {
     $obj = json_decode($response_body, true);
     $a2userId = $obj["accountId"];
-    update_option('allow2_token', $a2token);
-    update_option('allow2_secret', $a2secret);
-    update_option('allow2_userId', $a2userId);
+    update_option('allow2_token', sanitize_text_field($a2token));
+    update_option('allow2_secret', sanitize_text_field($a2secret));
+    update_option('allow2_userId', sanitize_text_field($a2userId));
     ?>
       <div class="updated"><p><strong><?php _e('Connected to Allow2.'); ?></strong></p></div>
     <?php
@@ -71,9 +71,9 @@ if ($_POST['allow2_setup'] == 'Y') {
   $a2token = '';
   $a2secret = '';
   $a2userId = false;
-  update_option('allow2_token', $a2token);
-  update_option('allow2_secret', $a2secret);
-  update_option('allow2_userId', $a2userId);
+  update_option('allow2_token', sanitize_text_field($a2token));
+  update_option('allow2_secret', sanitize_text_field($a2secret));
+  update_option('allow2_userId', sanitize_text_field($a2userId));
 
 } else {
   //Normal page display
@@ -89,7 +89,7 @@ if ($a2userId) {
       if (!class_exists('UseClientsTimezone')) {
         ?>
           <div>
-              WARNING: The Allow2 WP plugin requires <a target="timezoneplugin" href="<?php echo esc_attr($homeUrl); ?>/wp-admin/plugin-install.php?tab=plugin-information&plugin=use-clients-time-zone">Use Client's Time Zone</a>, but it seems to either be missing or not activated.
+              WARNING: The Allow2 WP plugin requires <a target="timezoneplugin" href="<?php echo admin_url("/plugin-install.php?tab=plugin-information&plugin=use-clients-time-zone"); ?>">Use Client's Time Zone</a>, but it seems to either be missing or not activated.
               Allow2 will be disabled until it has been correctly installed.
           </div>
         <?php
@@ -103,16 +103,18 @@ if ($a2userId) {
                     <tr>
                         <th><label for="allow2_token"><?php _e("Token :"); ?></label></th>
                         <td aria-live="assertive">
-                            <div class="allow2_token">
-                              <?php echo esc_attr($a2token); ?>
+                            <input type="text" readonly class="allow2_token" id="allow2_token" size="50" value="<?= esc_attr($a2token); ?>"/>
+                            <div class="button button-primary allow2_copy_btn" data-clipboard-target="#allow2_token">
+                                <i title="Copy to clipboard">&nbsp;</i>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <th><label for="allow2_secret"><?php _e("Secret :"); ?></label></th>
                         <td aria-live="assertive">
-                            <div class="allow2_secret">
-                              <?php echo esc_attr($a2secret); ?>
+                            <input type="text" readonly class="allow2_secret" id="allow2_secret" size="50" value="<?= esc_attr($a2secret); ?>"/>
+                            <div class="button button-primary allow2_copy_btn" data-clipboard-target="#allow2_secret">
+                                <i title="Copy to clipboard">&nbsp;</i>
                             </div>
                         </td>
                     </tr>
@@ -148,7 +150,11 @@ if ($a2userId) {
             </form>
         </div>
     </div>
-
+    <script>
+      jQuery(function () {
+        new ClipboardJS('.allow2_copy_btn');
+      })
+    </script>
   <?php
 } else {
   ?>
@@ -157,7 +163,7 @@ if ($a2userId) {
       if (!class_exists('UseClientsTimezone')) {
         ?>
           <div>
-              WARNING: The Allow2 WP plugin requires <a target="timezoneplugin" href="<?php echo esc_attr($homeUrl); ?>/wp-admin/plugin-install.php?tab=plugin-information&plugin=use-clients-time-zone">Use Client's Time Zone</a>, but it seems to either be missing or not activated.
+              WARNING: The Allow2 WP plugin requires <a target="timezoneplugin" href="<?php echo admin_url("/plugin-install.php?tab=plugin-information&plugin=use-clients-time-zone"); ?>">Use Client's Time Zone</a>, but it seems to either be missing or not activated.
               Allow2 will be disabled until it has been correctly installed.
           </div>
         <?php
@@ -235,6 +241,5 @@ if ($a2userId) {
         </div>
     </div>
   <?php
-  wp_enqueue_script('clipboard', plugin_dir_url(__FILE__) . 'lib/clipboard.min.js', array('jquery'), '0.1');
 }
 ?>
