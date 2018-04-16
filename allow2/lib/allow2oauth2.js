@@ -33,7 +33,7 @@ function requestAllow2OauthCode() {
     };
     console.log('ajaxurl', ajaxurl, 'data', data);
     jQuery.ajax({
-      url: ajaxurl,
+      url: php_data.ajaxurl,
       method: 'POST',
       data: data,
       dataType: 'json',
@@ -129,7 +129,7 @@ function checkAllow2Status() {
   button.prop('disabled', true);
   try {
     jQuery.ajax({
-      url: ajaxurl,
+      url: php_data.ajaxurl,
       method: 'POST',
       data: data,
       dataType: 'json',
