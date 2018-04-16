@@ -1,0 +1,18 @@
+.allow2_copy_btn i {
+  position: relative;
+  width: 13px;
+  display: block;
+}
+
+.allow2_copy_btn i:before {
+  content: ' ';
+  background-image: url('copy.svg');
+  top: 0;
+  left: 0;
+  height: 24px;
+  position: absolute;
+  background-position: center;
+  background-size: contain;
+  width: 100%;
+  background-repeat: no-repeat;
+}
