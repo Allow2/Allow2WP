@@ -20,7 +20,7 @@ function startAllow2Request() {
   button.prop('disabled', true);
   try {
     jQuery.ajax({
-      url: ajaxurl,
+      url: php_data.ajaxurl,
       method: 'POST',
       data: data,
       dataType: 'json',
