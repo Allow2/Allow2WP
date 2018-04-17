@@ -5,7 +5,7 @@ Donate link: No thanks
 Requires at least: 4.9.4
 Tested up to: 4.9.4
 Requires PHP: 7.0.27
-Stable tag: trunk
+Stable tag: 1.0.1
 License: Similar to Apache 2.0
 License URI: https://www.allow2.com/developer-license/
 
