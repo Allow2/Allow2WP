@@ -54,3 +54,6 @@ fabric.properties
 *.zip
 
 **/.DS_Store
+
+
+wp_svn
