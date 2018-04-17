@@ -19,13 +19,15 @@
  */
 
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
-//defined( 'ABSPATH' ) or die( 'No script kiddies please!' ); ??
 
+define('ALLOW2_VER', '1.0.1');
 
 /**
  * Admin Menu Components
  */
 function allow2_admin() {
+  wp_enqueue_script('allow2_clipboard', plugin_dir_url(__FILE__) . 'lib/clipboard.min.js', array('jquery'), ALLOW2_VER);
+  wp_enqueue_style('allow2_admin_style', plugin_dir_url(__FILE__) . 'assets/allow2_admin.css', null, ALLOW2_VER);
   include('allow2_admin.php');
 }
 
@@ -98,7 +100,7 @@ function allow2_user_profile_fields($user) {
                     <div class="allow2status">
                         <button type="button" class="button button-secondary" name="allow2status" id="allow2_status_button" onclick="checkAllow2Status(); false;">Check Status</button>
                         &nbsp;
-                        <i id="allow2_status_check_spinner" class="fa fa-spinner fa-pulse fa-2x" style="display: none;" aria-hidden="true"></i>
+                        <img alt="spinner" src="<?= plugin_dir_url(__FILE__) ?>assets/wpspin_light.gif" id="allow2_status_check_spinner" class="" style="display: none;" aria-hidden="true">
                     </div>
                     <p class="description">Note: Only the account you are controlled by can disconnect you from within the Allow2 system.</p>
                     <p class="description">You appear to be in the <?php echo date_default_timezone_get(); ?> timezone, if this is not correct Allow2 may not operate correctly, please inform the site administrator.</p>
@@ -110,7 +112,7 @@ function allow2_user_profile_fields($user) {
                     <div class="allow2request">
                         <button type="button" class="button button-secondary" name="allow2request" id="allow2_request_button" onclick="startAllow2Request(); false;">New Request</button>
                         &nbsp;
-                        <i id="allow2_make_request_spinner" class="fa fa-spinner fa-pulse fa-2x" style="display: none;" aria-hidden="true"></i>
+                        <img alt="spinner" src="<?= plugin_dir_url(__FILE__) ?>assets/wpspin_light.gif" id="allow2_make_request_spinner" class="" style="display: none;" aria-hidden="true">
                     </div>
                     <p class="description">Ask for more time, change the day type or request other changes.</p>
                     <p class="description">NOTE: If this button appears to do nothing, check the popup window is not being blocked by your browser.</p>
@@ -131,11 +133,12 @@ function allow2_user_profile_fields($user) {
         </table>
 
       <?php
-      wp_enqueue_script('allow2oauth2', plugin_dir_url(__FILE__) . 'lib/allow2oauth2.js', array('jquery'), '0.1');
-      wp_enqueue_script('allow2request', plugin_dir_url(__FILE__) . 'lib/allow2request.js', array('jquery'), '0.1');
+      wp_enqueue_script('allow2oauth2', plugin_dir_url(__FILE__) . 'lib/allow2oauth2.js', array('jquery'), ALLOW2_VER);
+      wp_enqueue_script('allow2request', plugin_dir_url(__FILE__) . 'lib/allow2request.js', array('jquery'), ALLOW2_VER);
       $php_data = array(
-        'user_id' => $user->ID,
-        'nonce' => wp_create_nonce('allow2_nonce_' . $user->ID),
+        'user_id' => (int)$user->ID,
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('allow2_nonce_' . (int)$user->ID),
         'a2_sr_n' => wp_create_nonce('allow2_start_request'),
         'a2_cs_n' => wp_create_nonce('allow2_check_status'),
         'a2_fce_n' => wp_create_nonce('allow2_finish_code_exchange'),
@@ -196,8 +199,8 @@ function allow2_set_oauth2_token($grantCode, $grantType) {
   $oauth2token_url = 'https://api.allow2.com/oauth2/token';
 
   $clienttoken_post = array(
-    "client_id" => get_option('allow2_token', false),
-    "client_secret" => get_option('allow2_secret', false)
+    "client_id" => sanitize_text_field(get_option('allow2_token', false)),
+    "client_secret" => sanitize_text_field(get_option('allow2_secret', false))
   );
 
   if (!$clienttoken_post['client_id'] || !$clienttoken_post['client_secret']) {
@@ -241,20 +244,20 @@ function allow2_set_oauth2_token($grantCode, $grantType) {
 
   $success = isset($authObj['refresh_token']);
   if ($success) {
-    $refreshToken = $authObj['refresh_token'];
+    $refreshToken = sanitize_text_field($authObj['refresh_token']);
     $changed = !isset($settings['allow2_refresh_token']) || ($settings['allow2_refresh_token'] != $refreshToken);
     if ($changed) {
       $settings['allow2_refresh_token'] = $refreshToken;
-      $success = update_user_meta($user_id, 'allow2_settings', $settings);
+      $success = update_user_meta($user_id, 'allow2_settings', allow2_sanitize_text_or_array_field($settings));
     }
   }
   if ($success) {
-    $settings['allow2_access_token_expires'] = strtotime("+" . $authObj['expires_in'] . " seconds");
-    $success = update_user_meta($user_id, 'allow2_settings', $settings);
+    $settings['allow2_access_token_expires'] = strtotime("+" . sanitize_text_field($authObj['expires_in']) . " seconds");
+    $success = update_user_meta($user_id, 'allow2_settings', allow2_sanitize_text_or_array_field($settings));
   }
   if ($success) {
-    $settings['allow2_access_token'] = $authObj['access_token'];
-    $success = update_user_meta($user_id, 'allow2_settings', $settings);
+    $settings['allow2_access_token'] = sanitize_text_field($authObj['access_token']);
+    $success = update_user_meta($user_id, 'allow2_settings', allow2_sanitize_text_or_array_field($settings));
     if ($success) {
       $success = $authObj['access_token'];
     }
@@ -289,7 +292,6 @@ function allow2_get_access_token() {
   if (time() < $expiration_time) {
     return $settings['allow2_access_token'];
   }
-
   // at this point we have an expiration time but it is in the past or will be very soon
   return allow2_set_oauth2_token(null, 'refresh_token');
 }
@@ -304,7 +306,7 @@ function allow2_get_access_token() {
 add_action('wp_ajax_allow2_check_status', 'allow2_check_status');
 
 function allow2_check_status() {
-    
+
   $user_id = get_current_user_id();
   check_ajax_referer('allow2_nonce_' . $user_id, 'nonce');
 
@@ -315,8 +317,8 @@ function allow2_check_status() {
   }
 
   $postData = array(
-    "client_id" => get_option('allow2_token', false),
-    "client_secret" => get_option('allow2_secret', false)
+    "client_id" => sanitize_text_field(get_option('allow2_token', false)),
+    "client_secret" => sanitize_text_field(get_option('allow2_secret', false))
   );
   /*var_dump($postData);
   die();*/
@@ -382,7 +384,7 @@ function allow2_start_request() {
 
 
   /* check nonce nonce from form or die() */
-  if (!isset($_POST['a2_sr_n']) || !wp_verify_nonce(esc_attr($_POST['a2_sr_n']), 'allow2_start_request')) {
+  if (!isset($_POST['a2_sr_n']) || !wp_verify_nonce(sanitize_text_field($_POST['a2_sr_n']), 'allow2_start_request')) {
     echo '{ "status": "nonce error" }';
     exit;
   }
@@ -393,15 +395,15 @@ function allow2_start_request() {
   $nonce = '';
   $query_arg = 'nonce';
   if ($query_arg && isset($_POST[$query_arg]))
-    $nonce = esc_attr($_POST[$query_arg]);
+    $nonce = sanitize_text_field($_POST[$query_arg]);
   elseif (isset($_POST['_ajax_nonce']))
-    $nonce = esc_attr($_POST['_ajax_nonce']);
+    $nonce = sanitize_text_field($_POST['_ajax_nonce']);
   elseif (isset($_POST['_wpnonce']))
-    $nonce = esc_attr($_POST['_wpnonce']);
+    $nonce = sanitize_text_field($_POST['_wpnonce']);
 
   $postData = array(
-    "client_id" => get_option('allow2_token', false),
-    "client_secret" => get_option('allow2_secret', false),
+    "client_id" => sanitize_text_field(get_option('allow2_token', false)),
+    "client_secret" => sanitize_text_field(get_option('allow2_secret', false)),
     "serviceToken" => $nonce
   );
   // not using allow2, reject the request and clear settings for the user
@@ -420,7 +422,7 @@ function allow2_start_request() {
     http_response_code(403);
     echo '{"status":"not connected"}';
     wp_die();
-    return;
+    return false;
   }
 
 
@@ -429,7 +431,7 @@ function allow2_start_request() {
   $tempToken_url = $host . '/request/tempToken';
 
   // ok, all good, hit the Allow2 server to verify current status for this user
-  $postData['refreshToken'] = $settings['allow2_refresh_token'];
+  $postData['refreshToken'] = sanitize_text_field($settings['allow2_refresh_token']);
   $postargs = array(
     'body' => $postData,
     'timeout' => 20
@@ -486,7 +488,9 @@ function allow2_log_me($message) {
  * activities:
  *    1 : General Internet/Web Site/Browsing Access
  */
+add_action('get_header', 'allow2_checkAndLog');
 function allow2_checkAndLog() {
+
   //
   // If admin account or not logged in (no identity = anonymous public access) then it's allowed
   // Allow2 only manages user accounts, not anonymous activity
@@ -596,7 +600,7 @@ function allow2_checkAndLog() {
 
   // simplistic cache for now, cache the entire result
   // todo: cache each service separately possibly? or is this good enough for now?
-  update_user_meta($user_id, 'allow2_cache', $result);
+  update_user_meta($user_id, 'allow2_cache', allow2_sanitize_text_or_array_field($result));
 
   if ($allowed) {
     return;
@@ -616,17 +620,46 @@ function allow2_checkAndLog() {
   }
   nocache_headers();
 
-  $pageData = '<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">'
-    . '<h1>Allow2 Limited - ' . $dayType . '</h1><p>Access currently not Allowed.</p>' . $reasons
-    . '<button class="btn btn-primary" onclick="startAllow2Request(); false;">New Request</button>'
-    . '&nbsp;<i id="allow2_make_request_spinner" class="fa fa-spinner fa-pulse" style="display: none;" aria-hidden="true" ></i>'
-    . '<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>'
-    . '<script> php_data = { user_id:' . $user_id . ', nonce:"' . wp_create_nonce('allow2_nonce_' . $user_id) . '"}; ajaxurl="' . admin_url('admin-ajax.php') . '";</script>'
-    . '<script src="' . plugin_dir_url(__FILE__) . 'lib/allow2request.js"></script>';
+  wp_register_script('allow2request', plugin_dir_url(__FILE__) . 'lib/allow2request.js', array('jquery'), ALLOW2_VER, 0);
+  $php_data = array(
+    'ajaxurl' => admin_url('admin-ajax.php'),
+    'nonce' => wp_create_nonce('allow2_nonce_' . get_current_user_id()),
+    'a2_sr_n' => wp_create_nonce('allow2_start_request'),
+  );
+  wp_localize_script('allow2request', 'php_data', $php_data);
+  wp_enqueue_script('allow2request');
+
+  wp_head();
+
+  ob_start();
+  ?><h1>Allow2 Limited - <?= $dayType ?></h1><p>Access currently not Allowed.</p> <?= $reasons ?>
+    <button class="btn btn-primary" onclick="startAllow2Request(); false;">New Request</button>
+    &nbsp;<img id="allow2_make_request_spinner" src="<?= plugin_dir_url(__FILE__) ?>assets/wpspin_light.gif" class="" alt="spinner" style="display: none;" aria-hidden="true">
+  <?php $pageData = ob_get_clean();
 
   wp_die($pageData, 'Allow2 Limited', array('response' => '503'));
 }
 
-add_action('get_header', 'allow2_checkAndLog');
+/**
+ * Recursive sanitation for text or array
+ *
+ * @param $array_or_string (array|string)
+ * @return mixed
+ */
+function allow2_sanitize_text_or_array_field($array_or_string) {
+  if (is_string($array_or_string)) {
+    $array_or_string = sanitize_text_field($array_or_string);
+  } elseif (is_array($array_or_string)) {
+    foreach ($array_or_string as $key => &$value) {
+      if (is_array($value)) {
+        $value = allow2_sanitize_text_or_array_field($value);
+      } else {
+        $value = sanitize_text_field($value);
+      }
+    }
+  }
+
+  return $array_or_string;
+}
 
 ?>
