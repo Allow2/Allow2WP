@@ -1,11 +1,13 @@
 === Allow2 ===
-Contributors: Allow2
+Author: Allow2
+Author URI: https://www.allow2.com
+Contributors: allow2,defmans7
 Tags: control,children,freedom,child,controls,quota,parental-control,parental,parent,family,wordpress,wordpress-plugin,social-network,social,gaming,time,limit,limits,time-limit,php
 Donate link: No thanks
 Requires at least: 4.9.4
 Tested up to: 4.9.4
 Requires PHP: 7.0.27
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 License: Similar to Apache 2.0
 License URI: https://www.allow2.com/developer-license/
 
@@ -41,6 +43,10 @@ When you create the service in your Allow2 developer account, name it according 
 3. User Profile paired with Allow2
 
 == Changelog ==
+1.1.0
+Move clipboard buttons to Callback and Webhook URI fields
+Fix Author and Contributors
+
 1.0.1
 Initial Release
 
