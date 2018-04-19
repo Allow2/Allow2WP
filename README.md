@@ -21,3 +21,7 @@ See the [Allow2WP Wiki](https://github.com/Allow2/Allow2WP/wiki)
 ## Requires:
 
 ** Uses Client's Time Zone ** : [https://wordpress.org/plugins/use-clients-time-zone/](https://wordpress.org/plugins/use-clients-time-zone/)
+
+## Validate WP Readme
+
+[https://wordpress.org/plugins/developers/readme-validator/](https://wordpress.org/plugins/developers/readme-validator/)
