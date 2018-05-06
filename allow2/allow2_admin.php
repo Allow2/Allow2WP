@@ -151,8 +151,15 @@ if ($a2userId) {
         </div>
     </div>
     <script>
-      jQuery(function () {
+      /* Todo: move this to a js file */
+      jQuery(function ($) {
         new ClipboardJS('.allow2_copy_btn');
+
+        $('input[name="Submit"').on('click', function (e) {
+          // e.preventDefault();
+          return confirm('Are you sure?');
+        });
+
       })
     </script>
   <?php
@@ -229,6 +236,7 @@ if ($a2userId) {
                 <i id="allow2_connect_spinner" class="fa fa-spinner fa-pulse fa-2x" style="display: none;" aria-hidden="true"></i>
 
                 <script type="text/javascript">
+                  /* todo: move this to a js file */
                   function allow2_submitConnect() {
                     console.log('connecting...');
                     var spinner = jQuery('#allow2_connect_spinner');
