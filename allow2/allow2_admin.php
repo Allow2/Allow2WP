@@ -104,25 +104,22 @@ if ($a2userId) {
                         <th><label for="allow2_token"><?php _e("Token :"); ?></label></th>
                         <td aria-live="assertive">
                             <input type="text" readonly class="allow2_token" id="allow2_token" size="50" value="<?= esc_attr($a2token); ?>"/>
-                            <div class="button button-primary allow2_copy_btn" data-clipboard-target="#allow2_token">
-                                <i title="Copy to clipboard">&nbsp;</i>
-                            </div>
                         </td>
                     </tr>
                     <tr>
                         <th><label for="allow2_secret"><?php _e("Secret :"); ?></label></th>
                         <td aria-live="assertive">
                             <input type="text" readonly class="allow2_secret" id="allow2_secret" size="50" value="<?= esc_attr($a2secret); ?>"/>
-                            <div class="button button-primary allow2_copy_btn" data-clipboard-target="#allow2_secret">
-                                <i title="Copy to clipboard">&nbsp;</i>
-                            </div>
                         </td>
                     </tr>
                     <tr>
                         <th><label for="allow2_redirect_uri"><?php _e("Redirect Uri :"); ?></label></th>
                         <td aria-live="assertive">
                             <div class="allow2_redirect_uri">
-                              <?php echo site_url() . '?allow2_callback=oauth'; ?>
+                                <input type="text" readonly id="allow2_callback" size="80" value="<?= site_url() . '?allow2_callback=oauth'; ?>">
+                                <div class="button button-primary allow2_copy_btn" data-clipboard-target="#allow2_callback">
+                                    <i title="Copy to clipboard">&nbsp;</i>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -130,7 +127,10 @@ if ($a2userId) {
                         <th><label for="allow2_webhook_uri"><?php _e("Webhook Uri :"); ?></label></th>
                         <td aria-live="assertive">
                             <div class="allow2_webhook_uri">
-                              <?php echo plugin_dir_url(__FILE__) . 'allow2_webhook.php'; ?>
+                                <input type="text" readonly id="allow2_webhook" size="80" value="<?= plugin_dir_url(__FILE__) . 'allow2_webhook.php'; ?>">
+                                <div class="button button-primary allow2_copy_btn" data-clipboard-target="#allow2_webhook">
+                                    <i title="Copy to clipboard">&nbsp;</i>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -194,20 +194,22 @@ if ($a2userId) {
                         <th><label for="allow2_redirect_uri"><?php _e("Redirect Uri :"); ?></label></th>
                         <td aria-live="assertive">
                             <div class="allow2_redirect_uri">
-                              <?php echo site_url() . '?allow2_callback=oauth'; ?>
+                                <input type="text" readonly id="allow2_callback" size="80" value="<?= site_url() . '?allow2_callback=oauth'; ?>">
+                                <div class="button button-primary allow2_copy_btn" data-clipboard-target="#allow2_callback">
+                                    <i title="Copy to clipboard">&nbsp;</i>
+                                </div>
                             </div>
-                            <!-- <button class="btn" data-clipboard-target=".allow2_redirect_uri">Copy to Clipboard</button> -->
                         </td>
                     </tr>
                     <tr>
                         <th><label for="allow2_webhook_uri"><?php _e("Webhook Uri :"); ?></label></th>
                         <td aria-live="assertive">
                             <div class="allow2_webhook_uri">
-                              <?php
-                              /* todo: update webhook */
-                              echo plugin_dir_url(__FILE__) . 'allow2_webhook.php'; ?>
+                                <input type="text" readonly id="allow2_webhook" size="80" value="<?= plugin_dir_url(__FILE__) . 'allow2_webhook.php'; ?>">
+                                <div class="button button-primary allow2_copy_btn" data-clipboard-target="#allow2_webhook">
+                                    <i title="Copy to clipboard">&nbsp;</i>
+                                </div>
                             </div>
-                            <!-- <button class="btn" data-clipboard-target=".allow2_webhook_uri">Copy to Clipboard</button>-->
                         </td>
                     </tr>
 
@@ -236,6 +238,10 @@ if ($a2userId) {
                     console.log('connecting...');
                     jQuery('#allow2_connect_form').submit();
                   }
+
+                  jQuery(function () {
+                    new ClipboardJS('.allow2_copy_btn');
+                  })
                 </script>
             </form>
         </div>
