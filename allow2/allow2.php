@@ -11,7 +11,7 @@
  * Plugin URI:  https://www.github.com/Allow2/Allow2WP
  * Description: The Allow2 WordPress plugin is a simple plug and play drop in component that empowers your site to offer full parental freedom.
  * Version:     1.0.1
- * Author:      Andrew Longhorn
+ * Author:      Allow2 Pty Ltd
  * Author URI:  https://www.allow2.com
  * Text Domain: allow2
  * License:     Similar to Apache 2.0
